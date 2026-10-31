@@ -1,9 +1,11 @@
+mod chat;
 use tauri::Manager;
 mod desktop;
 mod gateway;
 mod voice;
 pub fn run() {
     tauri::Builder::default()
+        .manage(chat::ChatState::default())
         .manage(voice::VoiceState::default())
         .manage(desktop::DesktopSettings::default())
         .setup(desktop::setup)
@@ -21,7 +23,10 @@ pub fn run() {
             voice::speak_text,
             voice::stop_speech,
             voice::speech_status,
-            voice::voice_input
+            voice::voice_input,
+            chat::configure_chat,
+            chat::chat_reply,
+            chat::gpu_speech
         ])
         .run(tauri::generate_context!())
         .expect("error running app");

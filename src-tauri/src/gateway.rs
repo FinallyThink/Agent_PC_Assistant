@@ -7,7 +7,7 @@ pub struct HealthResult {
     message: String,
 }
 
-fn endpoint(address: &str) -> Result<reqwest::Url, String> {
+pub fn local_endpoint(address: &str) -> Result<reqwest::Url, String> {
     let url = reqwest::Url::parse(address).map_err(|_| "地址格式不正确")?;
     if url.scheme() != "http"
         || !matches!(url.host_str(), Some("127.0.0.1") | Some("[::1]"))
@@ -19,12 +19,14 @@ fn endpoint(address: &str) -> Result<reqwest::Url, String> {
     {
         return Err("仅支持 http://127.0.0.1:端口 或 http://[::1]:端口，不接受路径或凭据".into());
     }
-    url.join("health").map_err(|_| "健康检查地址无效".into())
+    Ok(url)
 }
 
 #[tauri::command]
 pub async fn check_connection(address: String) -> Result<HealthResult, String> {
-    let url = endpoint(&address)?;
+    let url = local_endpoint(&address)?
+        .join("health")
+        .map_err(|_| "地址无效")?;
     let client = reqwest::Client::builder()
         .no_proxy()
         .redirect(reqwest::redirect::Policy::none())
@@ -71,16 +73,16 @@ mod tests {
             "http://127.0.0.1/a",
             "http://127.0.0.1/?token=x",
         ] {
-            assert!(endpoint(address).is_err(), "{address}");
+            assert!(local_endpoint(address).is_err(), "{address}");
         }
     }
     #[test]
     fn accepts_loopback() {
         assert_eq!(
-            endpoint("http://127.0.0.1:9881").unwrap().as_str(),
-            "http://127.0.0.1:9881/health"
+            local_endpoint("http://127.0.0.1:9881").unwrap().as_str(),
+            "http://127.0.0.1:9881/"
         );
-        assert!(endpoint("http://[::1]:9881").is_ok());
+        assert!(local_endpoint("http://[::1]:9881").is_ok());
     }
 }
 
@@ -153,7 +155,7 @@ pub struct CallResult {
 
 #[tauri::command]
 pub async fn call_capability(address: String, capability: String) -> Result<CallResult, String> {
-    let mut url = endpoint(&address)?;
+    let mut url = local_endpoint(&address)?;
     let path = match capability.as_str() {
         "service.health" => "/health",
         "service.capabilities" => "/capabilities",
