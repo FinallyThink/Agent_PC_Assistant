@@ -1,0 +1,37 @@
+{
+  "id": "deepseek",
+  "name": "DeepSeek · 澜鲸",
+  "shortName": "澜鲸",
+  "latin": "LANJING",
+  "tagline": "蓝鲸主题原创形象 · AI 指令驱动",
+  "type": "illustrated",
+  "asset": "avatar.png",
+  "poses": {
+    "happy": "wave-3.png",
+    "think": "think.png",
+    "confused": "confused.png"
+  },
+  "description": "原创蓝鲸主题角色。第一版为立绘动作预览，并非已绑定的 Cubism 模型。",
+  "animations": {
+    "wave": {
+      "frames": [
+        "wave-1.png",
+        "wave-2.png",
+        "wave-3.png",
+        "wave-4.png"
+      ],
+      "fps": 5
+    },
+    "blink": {
+      "frames": [
+        "blink/open.png",
+        "blink/half.png",
+        "blink/closed.png",
+        "blink/closed.png",
+        "blink/half.png",
+        "blink/open.png"
+      ],
+      "fps": 12
+    }
+  }
+}

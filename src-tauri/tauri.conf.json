@@ -1,0 +1,48 @@
+{
+    "$schema":  "https://schema.tauri.app/config/2",
+    "productName":  "Agent_PC_Assistant",
+    "version":  "0.1.0",
+    "identifier":  "com.agent-pc-assistant.app",
+    "build":  {
+                  "beforeDevCommand":  "npm run dev",
+                  "devUrl":  "http://localhost:1420",
+                  "beforeBuildCommand":  "npm run build",
+                  "frontendDist":  "../dist"
+              },
+    "app":  {
+                "windows":  [
+                                {
+                                    "title":  "Agent_PC_Assistant",
+                                    "width":  1000,
+                                    "height":  700
+                                },
+                                {
+                                    "label":  "pet",
+                                    "title":  "桌面助手",
+                                    "url":  "index.html?window=pet",
+                                    "width":  260,
+                                    "height":  300,
+                                    "transparent":  true,
+                                    "decorations":  false,
+                                    "alwaysOnTop":  true,
+                                    "resizable":  false,
+                                    "skipTaskbar":  true,
+                                    "shadow":  false
+                                }
+                            ],
+                "security":  {
+                                 "csp":  null
+                             }
+            },
+    "bundle":  {
+                   "active":  true,
+                   "targets":  "all",
+                   "icon":  [
+
+                            ],
+                   "resources":  [
+                                     "native/voice-chat.py",
+                                     "native/voice_input.py"
+                                 ]
+               }
+}
